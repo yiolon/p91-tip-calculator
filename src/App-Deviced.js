@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 export default function App() {
@@ -83,13 +83,19 @@ function SelectPercentage({ person, setSelectedPercentage }) {
 }
 
 function TotalPrice({ bill, selectedPercentage, selectedPercentageFriend }) {
-  const tip =
-    (bill * selectedPercentage + bill * selectedPercentageFriend) / 2 / 100;
-  const total = tip + bill;
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const tip =
+      (bill * selectedPercentage + bill * selectedPercentageFriend) / 2 / 100;
+    const totalBill = bill + tip;
+    setTotal(totalBill);
+  }, [bill, selectedPercentage, selectedPercentageFriend]);
+
   return (
     <div className="total">
       <h3>
-        Your pay ${total} (${bill} + ${tip.toFixed(2)} tip){" "}
+        Your pay ${total.toFixed(2)} (${bill} + ${total.toFixed(2) - bill} tip){" "}
       </h3>
     </div>
   );
